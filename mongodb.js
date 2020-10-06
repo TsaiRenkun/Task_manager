@@ -22,11 +22,12 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true }, (err, client) => {
 //     console.log(error)
 //   })
 
-  db.collection('tasks').deleteOne({
-      description: "Feed dog"
-  }).then((result)=>{
-      console.log(result)
-  }).then((error)=>{
-      console.log(error)
-  })
+//   db.collection('tasks').deleteOne({
+//       description: "Feed dog"
+//   }).then((result)=>{
+//       console.log(result)
+//   }).then((error)=>{
+//       console.log(error)
+//   })
+
 });
