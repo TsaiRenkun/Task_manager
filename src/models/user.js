@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
     lowercase: true,
+    unique:true,
     validate(value) {
       if (!validator.isEmail(value)) {
         throw new Error("email is invalid");
@@ -42,16 +43,19 @@ const userSchema = new mongoose.Schema({
 });
 
 //This creates the method in userSchema so we can access it in routes
-userSchema.static.findByCredentials = async (email, password) => {
+userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
+
   if (!user) {
     throw new Error("Unable to login");
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
+
   if (!isMatch) {
     throw new Error("Unable to login");
   }
+
   return user;
 };
 
