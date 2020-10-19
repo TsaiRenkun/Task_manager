@@ -11,13 +11,14 @@ app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
+//Withou
+
 app.listen(port, () => {
   console.log("server is working");
 });
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { json } = require("express");
 
 // const myFunction = async() =>{
 //   const password = "red12345"
@@ -34,13 +35,13 @@ const { json } = require("express");
 
 //using jsonwebtoken
 //trail will refector to ENV
-const JSONFunction = async () => {
-  //create 
-  const token = jwt.sign({ _id: "123" }, "thisismysecret", { expiresIn: '0 seconds'});
-  console.log(token);
-  //checking
-  const data = jwt.verify(token, 'thisismysecret')
-  console.log(data)
-};
+// const JSONFunction = async () => {
+//   //create 
+//   const token = jwt.sign({ _id: "123" }, "thisismysecret", { expiresIn: '0 seconds'});
+//   console.log(token);
+//   //checking
+//   const data = jwt.verify(token, 'thisismysecret')
+//   console.log(data)
+// };
 
-JSONFunction();
+// JSONFunction();

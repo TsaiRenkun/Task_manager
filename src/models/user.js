@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -13,7 +14,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
     lowercase: true,
-    unique:true,
+    unique: true,
     validate(value) {
       if (!validator.isEmail(value)) {
         throw new Error("email is invalid");
@@ -40,7 +41,25 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
+
+userSchema.methods.generateAuthToken = async function () {
+  const user = this; //not nesscary but makes it easier to see
+  const token = jwt.sign({ _id: user._id.toString() }, "thisismysecret");
+
+  user.tokens = user.tokens.concat({ token });
+
+  await user.save()
+  return token;
+};
 
 //This creates the method in userSchema so we can access it in routes
 userSchema.statics.findByCredentials = async (email, password) => {
