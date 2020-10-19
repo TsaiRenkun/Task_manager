@@ -32,7 +32,7 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-//Find users
+//Find users (Admin)
 router.get("/users", auth, async (req, res) => {
   try {
     const users = await User.find({});
@@ -40,6 +40,11 @@ router.get("/users", auth, async (req, res) => {
   } catch (e) {
     res.status(500).send();
   }
+});
+
+//Find Own profile
+router.get("/users/me", auth, async (req, res) => {
+  res.send(req.user)
 });
 
 //Find single user
