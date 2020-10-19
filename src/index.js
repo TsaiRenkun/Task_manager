@@ -7,11 +7,30 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
+//Example of middlewar function
+// app.use((req, res, next) => {
+//   if(req.method === 'GET'){
+//     res.send('GET request are disabled')
+//   } else {
+//     next()
+//   }
+// });
+
+// app.use((req, res, next)=>{
+//   if(req.method){
+//     res.status(503).send('Site is under going some changes')
+//   } else {
+//     next()
+//   }
+// })
+
 app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
-//Withou
+//Without middleware: new request -> run route handler
+
+//with middleware: new request -> do something(can create and target routes) -> run route handler
 
 app.listen(port, () => {
   console.log("server is working");
@@ -36,7 +55,7 @@ const jwt = require("jsonwebtoken");
 //using jsonwebtoken
 //trail will refector to ENV
 // const JSONFunction = async () => {
-//   //create 
+//   //create
 //   const token = jwt.sign({ _id: "123" }, "thisismysecret", { expiresIn: '0 seconds'});
 //   console.log(token);
 //   //checking
