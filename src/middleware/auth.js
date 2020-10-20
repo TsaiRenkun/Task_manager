@@ -14,6 +14,7 @@ const auth = async (req, res, next) => {
     if (!user) {
       throw new Error();
     }
+    req.token = token
     req.user = user
     next();
   } catch (e) {
@@ -24,5 +25,6 @@ const auth = async (req, res, next) => {
 module.exports = auth;
 
 // Example of how to use middleware in a another file
+// (path, middleware, (req,res)= >{})
 // router.get("/users", auth, async (req, res) => {
 //   });
