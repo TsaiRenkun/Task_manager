@@ -51,6 +51,29 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+//to ensure secruity and never to send back passwords and tokens
+// const pet = {
+//   name: "hall"
+// }
+
+// pet.toJSON = function(){
+//   console.log(this)
+//   return {}
+// }
+
+// console.log(JSON.stringify(pet))
+
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+};
+
+//Creating JWT token
 userSchema.methods.generateAuthToken = async function () {
   const user = this; //not nesscary but makes it easier to see
   const token = jwt.sign({ _id: user._id.toString() }, "thisismysecret");
@@ -60,6 +83,7 @@ userSchema.methods.generateAuthToken = async function () {
   await user.save()
   return token;
 };
+
 
 //This creates the method in userSchema so we can access it in routes
 userSchema.statics.findByCredentials = async (email, password) => {

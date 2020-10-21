@@ -36,8 +36,8 @@ app.listen(port, () => {
   console.log("server is working");
 });
 
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
 
 // const myFunction = async() =>{
 //   const password = "red12345"
