@@ -92,11 +92,7 @@ router.patch("/users/me", auth, async (req, res) => {
 
     await req.user.save();
 
-    if (!user) {
-      return res.status(404).send();
-    }
-
-    res.send(user);
+    res.send(req.user);
   } catch (e) {
     res.status(400).send();
   }
