@@ -51,6 +51,12 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner'
+})
+
 //to ensure secruity and never to send back passwords and tokens
 // const pet = {
 //   name: "hall"
