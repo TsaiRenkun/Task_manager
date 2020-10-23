@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Task = require("./task");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -51,11 +52,11 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-userSchema.virtual('tasks', {
-  ref: 'Task',
-  localField: '_id',
-  foreignField: 'owner'
-})
+userSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 //to ensure secruity and never to send back passwords and tokens
 // const pet = {
@@ -70,13 +71,13 @@ userSchema.virtual('tasks', {
 // console.log(JSON.stringify(pet))
 
 userSchema.methods.toJSON = function () {
-  const user = this
-  const userObject = user.toObject()
+  const user = this;
+  const userObject = user.toObject();
 
-  delete userObject.password
-  delete userObject.tokens
+  delete userObject.password;
+  delete userObject.tokens;
 
-  return userObject
+  return userObject;
 };
 
 //Creating JWT token
@@ -86,10 +87,9 @@ userSchema.methods.generateAuthToken = async function () {
 
   user.tokens = user.tokens.concat({ token });
 
-  await user.save()
+  await user.save();
   return token;
 };
-
 
 //This creates the method in userSchema so we can access it in routes
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -114,6 +114,15 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+
+  next();
+});
+
+//Delete user tasks when user is removed
+userSchema.pre("remove", async function (next) {
+  const user = this;
+
+  await Task.deleteMany({ ownwer: user._id });
 
   next();
 });
