@@ -1,8 +1,10 @@
 const express = require("express");
+const multer = require("multer");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 const router = new express.Router();
 
+const upload = multer({ dest: "avater" });
 //Creating new user
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
@@ -48,17 +50,17 @@ router.post("/users/logout", auth, async (req, res) => {
 });
 
 //logout all
-router.post("/users/logoutAll", auth, async(req, res)=>{
+router.post("/users/logoutAll", auth, async (req, res) => {
   try {
-    req.user.tokens = []
+    req.user.tokens = [];
 
-    await req.user.save()
+    await req.user.save();
 
-    res.send()
+    res.send();
   } catch (e) {
     res.status(500).send();
   }
-})
+});
 
 //Find users (Admin)
 router.get("/users", auth, async (req, res) => {
@@ -73,6 +75,10 @@ router.get("/users", auth, async (req, res) => {
 //Find Own profile
 router.get("/users/me", auth, async (req, res) => {
   res.send(req.user);
+});
+
+router.post("/users/me/avatar", upload.single('avatar'), (req,res)=>{
+  res.send()
 });
 
 //update user
@@ -101,11 +107,13 @@ router.patch("/users/me", auth, async (req, res) => {
 //delete user
 router.delete("/users/me", auth, async (req, res) => {
   try {
-    await req.user.remove()
+    await req.user.remove();
     res.send(req.user);
   } catch (e) {
     res.status(400).send();
   }
 });
+
+
 
 module.exports = router;
