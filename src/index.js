@@ -7,15 +7,27 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
-const multer = require('multer')
+const multer = require("multer");
 const upload = multer({
-  dest: 'images'
-})
+  dest: "images",
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(doc|docx)$/)) {
+      return cb(new Error("Please upload pdf"));
+    }
 
-app.post('/upload', upload.single('upload'), (req,res)=>{
-  res.send()
-})
+    cb(undefined, true);
+    // cb(new Error('File must be a PDF'))
+    // cb(undefined, true)
+    // cb(undefined, false)
+  },
+});
 
+app.post("/upload", upload.single("upload"), (req, res) => {
+  res.send();
+});
 
 app.use(express.json());
 app.use(userRouter);
@@ -28,4 +40,3 @@ app.use(taskRouter);
 app.listen(port, () => {
   console.log("server is working");
 });
-
