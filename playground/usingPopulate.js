@@ -13,3 +13,8 @@ const main = async () => {
 }
 
 main()
+
+//Without middleware: new request -> run route handler
+
+//with middleware: new request -> do something(can create and target routes) -> run route handler
+
